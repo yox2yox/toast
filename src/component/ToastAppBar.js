@@ -19,8 +19,6 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-
-
 export default function ToastAppBar(props) {
     const classes = useStyles();
     return (
