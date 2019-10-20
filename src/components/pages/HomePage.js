@@ -1,9 +1,9 @@
 import React from 'react';
-import ToastAppBar from './ToastAppBar';
-import SearchBox from './SearchBox';
+import ToastAppBar from '../ToastAppBar';
+import SearchBox from '../SearchBox';
 import { withStyles } from '@material-ui/core/styles';
-import TokenInfoBox from './TokenInfoBox';
-import HorizontalList from './HorizontalList';
+import TokenInfoBox from '../TokenInfoBox';
+import HorizontalList from '../HorizontalList';
 
 const styles = {
     container:{

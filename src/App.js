@@ -1,9 +1,8 @@
 import React from 'react';
 import logo from './logo.svg';
 import './App.css';
-import ToastAppBar from './component/ToastAppBar';
 import { ThemeProvider,createMuiTheme } from '@material-ui/core/styles';
-import HomePage from './component/HomePage';
+import HomePage from './components/pages/HomePage';
 
 const theme = createMuiTheme({
   palette: {
