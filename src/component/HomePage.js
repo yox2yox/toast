@@ -3,6 +3,7 @@ import ToastAppBar from './ToastAppBar';
 import SearchBox from './SearchBox';
 import { withStyles } from '@material-ui/core/styles';
 import TokenInfoBox from './TokenInfoBox';
+import HorizontalList from './HorizontalList';
 
 const styles = {
     container:{
@@ -13,6 +14,10 @@ const styles = {
         margin:"10px auto",
         width:"90%",
         maxWidth:"400px",
+    },
+    holList:{
+        padding:"0 10px",
+        margin:"15px 0"
     }
 }
 
@@ -31,6 +36,12 @@ class HomePage extends React.Component{
                 <div className={this.props.classes.searchBox}>
                     <TokenInfoBox></TokenInfoBox>
                 </div>
+            </div>
+            <div className={this.props.classes.holList}>
+                <HorizontalList></HorizontalList>
+            </div>
+            <div className={this.props.classes.holList}>
+                <HorizontalList></HorizontalList>
             </div>
         </div>
         );
