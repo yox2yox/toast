@@ -11,9 +11,6 @@ import TagBox from '../TagBox';
 
 
 const styles = {
-    container:{
-        display:"flex"
-    },
     content:{
         margin:"10px auto",
         width:"90%",
@@ -32,7 +29,7 @@ class ToastPage extends React.Component{
 
     render(){
         return(
-            <div className="container">
+            <div>
                 <ToastAppBar pageTitle="投稿"></ToastAppBar>
                 <div className={this.props.classes.content}>
                     <SearchBox placeholder="URL"></SearchBox>
