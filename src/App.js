@@ -4,6 +4,7 @@ import './App.css';
 import { ThemeProvider,createMuiTheme } from '@material-ui/core/styles';
 import HomePage from './components/pages/HomePage';
 import ToastPage from './components/pages/ToastPage'
+import ViewToastsPage from './components/pages/ViewToastsPage'
 
 const theme = createMuiTheme({
   palette: {
@@ -22,9 +23,10 @@ function App() {
     <ThemeProvider theme={theme}>
       <div className="App">
         <div style={{display:"none"}}>
-          <HomePage></HomePage>
+          <HomePage />
+          <ToastPage />
         </div>
-        <ToastPage></ToastPage>
+        <ViewToastsPage />
       </div>
     </ThemeProvider>
   );
