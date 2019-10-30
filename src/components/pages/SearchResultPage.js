@@ -1,13 +1,11 @@
 import React from 'react';
 import { withStyles } from '@material-ui/core/styles';
 import ToastAppBar from '../ToastAppBar';
-import ArticleCard from '../AtricleCard';
 import ArticleList from '../ArticleList';
 import SearchBox from '../SearchBox';
 
 const styles = {
     root:{
-        backgroundColor:"#ebebeb"
     },
     content:{
         margin:"10px auto",
@@ -28,9 +26,9 @@ class SearchResultPage extends React.Component{
         const classes = this.props.classes
         return (
             <div className={classes.root}>
-                <ToastAppBar pageTitle="記事"></ToastAppBar>
+                <ToastAppBar pageTitle="検索結果"></ToastAppBar>
                 <div className={this.props.classes.content}>
-                    <SearchBox placeholder="URL"></SearchBox>
+                    <SearchBox placeholder="検索"></SearchBox>
                 </div>
                 <div className={classes.comment}>
                     <ArticleList />

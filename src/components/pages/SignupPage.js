@@ -1,14 +1,7 @@
 import React from 'react';
 import { withStyles } from '@material-ui/core/styles';
 import ToastAppBar from '../ToastAppBar';
-import SearchBox from '../SearchBox';
-import ArticleCard from '../AtricleCard';
 import { TextField, Typography, Button } from '@material-ui/core';
-import IconButton from '@material-ui/core/IconButton';
-import InputAdornment from '@material-ui/core/InputAdornment';
-import AddBoxIcon from '@material-ui/icons/AddBox';
-import TagBox from '../TagBox';
-
 
 const styles = {
     content:{
