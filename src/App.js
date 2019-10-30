@@ -25,7 +25,7 @@ function App() {
   return (
     <ThemeProvider theme={theme}>
       <BrowserRouter>
-      <div>
+      <div class="App">
         <Route exact path='/' component={HomePage} />
         <Route path='/edit' component={ToastPage} />
         <Route path='/comments' component={ViewToastsPage} />
