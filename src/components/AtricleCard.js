@@ -2,17 +2,18 @@ import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
 import CardActionArea from '@material-ui/core/CardActionArea';
-import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
 import CardMedia from '@material-ui/core/CardMedia';
-import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import Icon from '@material-ui/core/Icon';
 
 const useStyles = makeStyles({
   card: {
-      maxwidth:400,
-      textAlign:"left"
+    width:"100%",
+    textAlign:"left"
+  },
+  cardContent:{
+    padding:16
   },
   media: {
       width:108,
@@ -44,8 +45,8 @@ const useStyles = makeStyles({
     display:"flex",
     alignItems: "center",
     textAlign:"left",
-    marginTop:10,
-    justifyContent: "space-around"
+    justifyContent: "space-around",
+    marginTop:10
   },
   infoContent:{
     display:"flex",
@@ -54,13 +55,13 @@ const useStyles = makeStyles({
   }
 });
 
-export default function AtricleCard() {
+export default function AtricleCard(props) {
   const classes = useStyles();
 
   return (
     <Card className={classes.card}>
       <CardActionArea>
-        <CardContent>
+        <CardContent className={classes.cardContent}>
             <div className={classes.content}>
                 <CardMedia
                 className={classes.media}
@@ -74,7 +75,7 @@ export default function AtricleCard() {
                 </Typography>
             </div>
           <Typography variant="body2" color="textSecondary" component="p">
-              本文
+            {props.discription}
           </Typography>
           <div className={classes.articleInfoBox}>
             <div className={classes.infoContent}>

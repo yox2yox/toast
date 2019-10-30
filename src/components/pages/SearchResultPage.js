@@ -2,7 +2,8 @@ import React from 'react';
 import { withStyles } from '@material-ui/core/styles';
 import ToastAppBar from '../ToastAppBar';
 import ArticleCard from '../AtricleCard';
-import ToastList from '../ToastList';
+import ArticleList from '../ArticleList';
+import SearchBox from '../SearchBox';
 
 const styles = {
     root:{
@@ -22,21 +23,21 @@ const styles = {
     }
 }
 
-class ViewToastsPage extends React.Component{
+class SearchResultPage extends React.Component{
     render(){
         const classes = this.props.classes
         return (
             <div className={classes.root}>
                 <ToastAppBar pageTitle="記事"></ToastAppBar>
-                <div className={classes.content}>
-                    <ArticleCard discription="ほげほげああああああああああああわたしたちは．あれです．ほほほほ．"></ArticleCard>
+                <div className={this.props.classes.content}>
+                    <SearchBox placeholder="URL"></SearchBox>
                 </div>
                 <div className={classes.comment}>
-                    <ToastList></ToastList>
+                    <ArticleList />
                 </div>
             </div>   
         );
     }
 }
 
-export default withStyles(styles)(ViewToastsPage);
+export default withStyles(styles)(SearchResultPage);
