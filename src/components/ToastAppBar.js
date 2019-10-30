@@ -8,8 +8,15 @@ import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
 
 const useStyles = makeStyles(theme => ({
-  root: {
+  bar: {
     flexGrow: 1,
+    marginTop: 0,
+    position: "fixed",
+    width: "100%",
+    zIndex:20
+  },
+  spacer:{
+    height:64
   },
   menuButton: {
     marginRight: theme.spacing(2),
@@ -22,8 +29,8 @@ const useStyles = makeStyles(theme => ({
 export default function ToastAppBar(props) {
     const classes = useStyles();
     return (
-        <div className={classes.root}>
-        <AppBar position="static">
+        <div>
+        <AppBar position="static"　className={classes.bar}>
             <Toolbar>
             <IconButton edge="start" className={classes.menuButton} color="inherit" aria-label="menu">
                 <MenuIcon />
@@ -34,6 +41,7 @@ export default function ToastAppBar(props) {
             <Button color="inherit">Login</Button>
             </Toolbar>
         </AppBar>
+        <div className={classes.spacer}></div>
         </div>
     );
 }
