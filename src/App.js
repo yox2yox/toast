@@ -7,6 +7,7 @@ import ViewToastsPage from './components/pages/ViewToastsPage'
 import SignupPage from './components/pages/SignupPage';
 import SearchResultPage from './components/pages/SearchResultPage';
 import UserInfoPage from './components/pages/UserInfoPage';
+import { BrowserRouter, Route, Link } from 'react-router-dom'
 
 const theme = createMuiTheme({
   palette: {
@@ -23,17 +24,17 @@ const theme = createMuiTheme({
 function App() {
   return (
     <ThemeProvider theme={theme}>
-      <div className="App">
-        <div style={{display:"none"}}>
-          <HomePage />
-          <ToastPage />
-          <ViewToastsPage />
-          <SignupPage />
-          <SearchResultPage />
-        </div>
-        <UserInfoPage />
+      <BrowserRouter>
+      <div>
+        <Route exact path='/' component={HomePage} />
+        <Route path='/edit' component={ToastPage} />
+        <Route path='/comments' component={ViewToastsPage} />
+        <Route path='/signup' component={SignupPage} />
+        <Route path='/result' component={SearchResultPage} />
+        <Route path='/user' component={UserInfoPage} />
       </div>
-    </ThemeProvider>
+    </BrowserRouter>
+  </ThemeProvider>
   );
 }
 
