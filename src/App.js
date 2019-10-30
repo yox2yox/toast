@@ -6,6 +6,7 @@ import ToastPage from './components/pages/ToastPage'
 import ViewToastsPage from './components/pages/ViewToastsPage'
 import SignupPage from './components/pages/SignupPage';
 import SearchResultPage from './components/pages/SearchResultPage';
+import UserInfoPage from './components/pages/UserInfoPage';
 
 const theme = createMuiTheme({
   palette: {
@@ -28,9 +29,9 @@ function App() {
           <ToastPage />
           <ViewToastsPage />
           <SignupPage />
+          <SearchResultPage />
         </div>
-        <SearchResultPage />
-        <SignupPage />
+        <UserInfoPage />
       </div>
     </ThemeProvider>
   );
