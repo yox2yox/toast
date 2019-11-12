@@ -20,8 +20,36 @@ const styles = {
 
 class SignupPage extends React.Component{
 
-    tryToSignup = () => {
-        console.log(this.props)
+    state = {
+        name:"",
+        discription:"",
+        waitingContract:false
+    }
+
+    tryToSignup = async () => {
+        const {name,discription,waitingContract} = this.state;
+        if (waitingContract === false){
+            if (name !== ""){
+                this.setState({waitingContract:true});
+                this.props.startLoading();
+                await this.props.contract.methods
+                        .signUp(name,discription)
+                        .send({from:this.props.accounts[0]});
+                this.props.updateUserData();
+                this.props.history.push("/home");
+                this.props.closeLoading();
+            } else {
+                alert("ユーザー名を入力してください")
+            }
+        }
+    }
+
+    onChangedName = (e) =>{
+        this.setState({name:e.target.value});
+    }
+
+    onChangedDisc = (e) => {
+        this.setState({discription:e.target.value});
     }
 
     render(){
@@ -35,6 +63,8 @@ class SignupPage extends React.Component{
                     <TextField 
                      label="アカウント名"
                      variant="outlined"
+                     value={this.state.name}
+                     onChange={this.onChangedName}
                      fullWidth/>
                 </div>
                 <div className={this.props.classes.content}>
@@ -43,11 +73,13 @@ class SignupPage extends React.Component{
                      variant="outlined"
                      rows="5"
                      rowsMax="10"
+                     value={this.state.discription}
+                     onChange={this.onChangedDisc}
                      multiline
                      fullWidth/>
                 </div>
                 <div className={this.props.classes.btnContent}>
-                    <Button variant="contained" color="primary" className={this.props.classes.submitBtn} onClick={this.tryToSignup()}>登録</Button>
+                    <Button variant="contained" color="primary" className={this.props.classes.submitBtn} onClick={this.tryToSignup}>登録</Button>
                 </div>
             </div>
         );

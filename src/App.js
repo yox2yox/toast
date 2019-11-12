@@ -39,13 +39,7 @@ const styles = {
 
 class App extends React.Component {
 
-  state = {
-    web3:null,
-    accounts:null,
-    contract:null,
-    loading:true,
-    history:null
-  }
+  state = {}
 
   constructor(props) {
     super(props);
@@ -56,7 +50,11 @@ class App extends React.Component {
       web3:null,
       accounts:null,
       contract:null,
+      userData:null,
       loading:true,
+      startLoading:this.startLoading,
+      closeLoading:this.closeLoading,
+      updateUserData:this.updateUserData,
       history:history
     }
   }
@@ -91,26 +89,28 @@ class App extends React.Component {
   };
 
   initData = async () => {
-    const { accounts, contract } = this.state;
-    let userData = await contract.methods.getUserData(accounts[0]).call();
-    console.log("Success to get UserData");
-    console.log(userData);
+    await this.updateUserData()
+    const userData = this.state.userData
     if (userData[0] === ""){
       this.state.history.push("/")
-      await contract.methods.signUp("hoge","fuga").send({from:accounts[0]});
-      userData = await contract.methods.getUserData(accounts[0]).call();
-      console.log("Success to get UserData");
-      console.log(userData);
     }
     this.closeLoading();
   }
 
-  startLoading(){
+  startLoading = () => {
    this.setState({loading:true});
   }
   
-  closeLoading(){
+  closeLoading = () => {
     this.setState({loading:false});
+  }
+
+  updateUserData = async () => {
+    const { accounts, contract } = this.state;
+    const userData = await contract.methods.getUserData(accounts[0]).call();
+    console.log("Success to get UserData");
+    console.log(userData);
+    this.setState({userData});
   }
 
   render(){

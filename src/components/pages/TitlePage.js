@@ -58,7 +58,7 @@ const styles = {
 
 class TitlePage extends React.Component{
 
-    onClickButton = ()=>{
+    onClickButton = () => {
         this.props.history.push('/signup');
     }
 
