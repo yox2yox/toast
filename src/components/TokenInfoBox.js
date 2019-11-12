@@ -32,17 +32,20 @@ const useStyles = makeStyles(theme => ({
     }
 }));
 
-export default function TokenInfoBox(){
+export default function TokenInfoBox(props){
     const classes = useStyles();
+    const {userData} = props;
+    console.log("called TokenInfoBox Component.And got these props")
+    console.log(props)
 
     return(
         <div>
             <div className={classes.userNameWrap}>
-                <span className={classes.userName}>グッドマン</span> さん
+            <span className={classes.userName}>{userData!=null?userData[0]:""}</span> さん
             </div>
             <div className={classes.tokenBox}>
                 <img className={classes.tokenIcon} src="img/ether.png" alt="Ether"/>
-                0.02 ether
+                {userData!=null?userData[2]:""} ether
             </div>
             <div className={classes.tokenRight}>
                 <img className={classes.tokenIcon} src="img/jelly.png" alt="Ether"/>

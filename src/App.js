@@ -129,7 +129,7 @@ class App extends React.Component {
         <Router history={this.state.history}>
         <div class="App" style={{height:"100%"}}>
           <Route exact path='/' component={TitlePage} />
-          <Route exact path='/home' component={HomePage} />
+          <Route exact path='/home' render={() => <HomePage {...this.state}/>} />
           <Route path='/edit' component={ToastPage} />
           <Route path='/comments' component={ViewToastsPage} />
           <Route path='/signup' render={()=> <SignupPage {...this.state}/>} />

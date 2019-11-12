@@ -23,6 +23,11 @@ const styles = {
 
 class HomePage extends React.Component{
 
+    componentDidMount = () => {
+        console.log("called HomePage. And got these props");
+        console.log(this.props)
+    }
+
     render(){
         return(
         <div className={this.props.classes.container}>
@@ -34,7 +39,7 @@ class HomePage extends React.Component{
             </div>
             <div>
                 <div className={this.props.classes.searchBox}>
-                    <TokenInfoBox></TokenInfoBox>
+                    <TokenInfoBox userData={this.props.userData}></TokenInfoBox>
                 </div>
             </div>
             <div className={this.props.classes.holList}>
