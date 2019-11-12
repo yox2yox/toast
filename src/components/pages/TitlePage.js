@@ -1,5 +1,6 @@
 import React from 'react';
 import { withStyles } from '@material-ui/core/styles';
+import { withRouter } from 'react-router';
 import { classes } from 'istanbul-lib-coverage';
 import { Button } from '@material-ui/core';
 
@@ -56,6 +57,11 @@ const styles = {
 }
 
 class TitlePage extends React.Component{
+
+    onClickButton = ()=>{
+        this.props.history.push('/signup');
+    }
+
     render(){
         const classes = this.props.classes;
         return(
@@ -71,7 +77,7 @@ class TitlePage extends React.Component{
                 <div>知りたいことを</div>
                 <div>見つけましょう</div>
                 <div className={classes.btnContain}>
-                    <Button variant="contained" className={classes.btn}>アカウント登録</Button>
+                    <Button variant="contained" className={classes.btn} onClick={this.onClickButton}>アカウント登録</Button>
                 </div>
             </div>
         </div>
@@ -79,4 +85,4 @@ class TitlePage extends React.Component{
     }
 }
 
-export default withStyles(styles)(TitlePage);
+export default withRouter(withStyles(styles)(TitlePage));

@@ -20,6 +20,10 @@ const styles = {
 
 class SignupPage extends React.Component{
 
+    tryToSignup = () => {
+        console.log(this.props)
+    }
+
     render(){
         return(
             <div>
@@ -43,7 +47,7 @@ class SignupPage extends React.Component{
                      fullWidth/>
                 </div>
                 <div className={this.props.classes.btnContent}>
-                    <Button variant="contained" color="primary" className={this.props.classes.submitBtn}>登録</Button>
+                    <Button variant="contained" color="primary" className={this.props.classes.submitBtn} onClick={this.tryToSignup()}>登録</Button>
                 </div>
             </div>
         );

@@ -9,9 +9,12 @@ import TitlePage from './components/pages/TitlePage';
 import SearchResultPage from './components/pages/SearchResultPage';
 import Loading from './components/Loading';
 import UserInfoPage from './components/pages/UserInfoPage';
-import { BrowserRouter, Route, Link } from 'react-router-dom'
+import { Router,BrowserRouter, Route, Link } from 'react-router-dom'
 import ToastsContract from "./contracts/Toasts.json";
 import getWeb3 from "./utils/getWeb3";
+import { withStyles } from '@material-ui/core/styles';
+import { createBrowserHistory } from "history";
+import { tsThisType } from '@babel/types';
 
 const theme = createMuiTheme({
   palette: {
@@ -25,13 +28,39 @@ const theme = createMuiTheme({
   },
 });
 
+const styles = {
+  loadingOn:{
+
+  },
+  loadingOff:{
+    display:"none"
+  }
+};
+
 class App extends React.Component {
 
   state = {
     web3:null,
     accounts:null,
-    contract:null
+    contract:null,
+    loading:true,
+    history:null
   }
+
+  constructor(props) {
+    super(props);
+    const history = createBrowserHistory();
+    console.log(history)
+    // ここで this.setState() を呼び出さないでください
+    this.state = {
+      web3:null,
+      accounts:null,
+      contract:null,
+      loading:true,
+      history:history
+    }
+  }
+
   componentDidMount = async () => {
     try {
       // Get network provider and web3 instance.
@@ -67,31 +96,44 @@ class App extends React.Component {
     console.log("Success to get UserData");
     console.log(userData);
     if (userData[0] === ""){
+      this.state.history.push("/")
       await contract.methods.signUp("hoge","fuga").send({from:accounts[0]});
       userData = await contract.methods.getUserData(accounts[0]).call();
       console.log("Success to get UserData");
       console.log(userData);
     }
+    this.closeLoading();
+  }
+
+  startLoading(){
+   this.setState({loading:true});
+  }
+  
+  closeLoading(){
+    this.setState({loading:false});
   }
 
   render(){
+    const classes = this.props.classes;
     return (
       <ThemeProvider theme={theme}>
-        <Loading></Loading>
-        <BrowserRouter>
+        <div className={this.state.loading?classes.loadingOn:classes.loadingOff}>
+          <Loading></Loading>
+        </div>
+        <Router history={this.state.history}>
         <div class="App" style={{height:"100%"}}>
           <Route exact path='/' component={TitlePage} />
           <Route exact path='/home' component={HomePage} />
           <Route path='/edit' component={ToastPage} />
           <Route path='/comments' component={ViewToastsPage} />
-          <Route path='/signup' component={SignupPage} />
+          <Route path='/signup' render={()=> <SignupPage {...this.state}/>} />
           <Route path='/result' component={SearchResultPage} />
           <Route path='/user' component={UserInfoPage} />
         </div>
-      </BrowserRouter>
+      </Router>
     </ThemeProvider>
     );
   }
 }
 
-export default App;
+export default withStyles(styles)(App);
