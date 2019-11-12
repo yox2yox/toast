@@ -5,7 +5,9 @@ import HomePage from './components/pages/HomePage';
 import ToastPage from './components/pages/ToastPage'
 import ViewToastsPage from './components/pages/ViewToastsPage'
 import SignupPage from './components/pages/SignupPage';
+import TitlePage from './components/pages/TitlePage';
 import SearchResultPage from './components/pages/SearchResultPage';
+import Loading from './components/Loading';
 import UserInfoPage from './components/pages/UserInfoPage';
 import { BrowserRouter, Route, Link } from 'react-router-dom'
 import ToastsContract from "./contracts/Toasts.json";
@@ -75,9 +77,11 @@ class App extends React.Component {
   render(){
     return (
       <ThemeProvider theme={theme}>
+        <Loading></Loading>
         <BrowserRouter>
-        <div class="App">
-          <Route exact path='/' component={HomePage} />
+        <div class="App" style={{height:"100%"}}>
+          <Route exact path='/' component={TitlePage} />
+          <Route exact path='/home' component={HomePage} />
           <Route path='/edit' component={ToastPage} />
           <Route path='/comments' component={ViewToastsPage} />
           <Route path='/signup' component={SignupPage} />
