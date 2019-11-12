@@ -89,10 +89,16 @@ class App extends React.Component {
   };
 
   initData = async () => {
+    const { history} = this.state;
+    const locationPath = history.location.pathname;
+    console.log("this page is "+locationPath);
     await this.updateUserData()
     const userData = this.state.userData
     if (userData[0] === ""){
-      this.state.history.push("/")
+      history.push("/")
+    }
+    else if (locationPath === "/signup" || locationPath === "/"){
+      history.push("/home")
     }
     this.closeLoading();
   }
