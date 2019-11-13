@@ -67,6 +67,13 @@ contract Toasts {
     tagToTagid[tag] = tags.length;
   }
 
+  function withdraw() public {
+    uint balance = usersData[msg.sender].balance;
+    require (balance > 0,"your balance is not enough");
+    usersData[msg.sender].balance = 0;
+    msg.sender.transfer(balance);
+  }
+
   function getUserData(address user) public view returns (string memory,string memory,uint) {
     return (usersData[user].name,usersData[user].discription,usersData[user].balance);
   }
