@@ -12,6 +12,8 @@ const styles = {
     },
     btnContent:{
         margin:"20px auto",
+        display:"flex",
+        justifyContent:"center"
     },
     submitBtn:{
         width:200
