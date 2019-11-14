@@ -67,11 +67,11 @@ export default function AtricleCard(props) {
                 className={classes.media}
                 component="img"
                 alt="Contemplative Reptile"
-                image="img/test_thumb.jpg"
+                image={props.image?props.image:"img/toast-icon.png"}
                 title="Contemplative Reptile"
                 />
                 <Typography gutterBottom component="h2" className={classes.title}>
-                    ものすごいあれが発見される。非常に興味深い。
+                    {props.title}
                 </Typography>
             </div>
           <Typography variant="body2" color="textSecondary" component="p">

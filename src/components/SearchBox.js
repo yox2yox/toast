@@ -34,7 +34,7 @@ export default function SearchBox(props) {
         placeholder={props.placeholder}
         inputProps={{ 'aria-label': 'search google maps' }}
       />
-      <IconButton className={classes.iconButton} aria-label="search">
+      <IconButton className={classes.iconButton} aria-label="search" onClick={props.onClick}>
         <SearchIcon />
       </IconButton>
     </Paper>

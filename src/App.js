@@ -55,6 +55,7 @@ class App extends React.Component {
       startLoading:this.startLoading,
       closeLoading:this.closeLoading,
       updateUserData:this.updateUserData,
+      getOgp:this.getOgpData,
       history:history
     }
   }
@@ -104,8 +105,6 @@ class App extends React.Component {
     else if (locationPath === "/signup" || locationPath === "/"){
       history.push("/home")
     }
-    const ogp = getOgp();
-    console.log(ogp);
     this.closeLoading();
   }
 
@@ -125,6 +124,16 @@ class App extends React.Component {
     this.setState({userData});
   }
 
+  getOgpData = (url) => {
+    try{
+      const ogp = getOgp();
+      return ogp
+    }
+    catch(err){
+      return {Result:[]}
+    }
+  }
+
   render(){
     const classes = this.props.classes;
     return (
@@ -136,7 +145,7 @@ class App extends React.Component {
         <div style={{height:"100%"}}>
           <Route exact path='/' component={TitlePage} />
           <Route exact path='/home' render={() => <HomePage {...this.state}/>} />
-          <Route path='/edit' component={ToastPage} />
+          <Route path='/edit' render={()=> <ToastPage {...this.state}/>}/>
           <Route path='/comments' component={ViewToastsPage} />
           <Route path='/signup' render={()=> <SignupPage {...this.state}/>} />
           <Route path='/result' component={SearchResultPage} />

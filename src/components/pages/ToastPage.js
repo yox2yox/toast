@@ -27,20 +27,36 @@ const styles = {
 
 class ToastPage extends React.Component{
 
+    state = {
+        articleData: null
+    }
+
+    onSearchUrl = () =>{
+        const data = this.props.getOgp();
+        console.log("called onSearchUrl success to get data")
+        console.log(data)
+        this.setState({articleData:data.Result});
+    };
+
     render(){
+        const { classes} = this.props;
+        const { articleData } = this.state;
         return(
             <div>
                 <ToastAppBar pageTitle="投稿"></ToastAppBar>
-                <div className={this.props.classes.content}>
-                    <SearchBox placeholder="URL"></SearchBox>
+                <div className={classes.content}>
+                    <SearchBox placeholder="URL" onClick={this.onSearchUrl}></SearchBox>
                 </div>
-                <div className={this.props.classes.content}>
-                    <ArticleCard></ArticleCard>
+                <div className={classes.content}>
+                    <ArticleCard
+                        title={articleData!=null?articleData.title:""}
+                        image={articleData!=null?articleData.image:""}
+                    ></ArticleCard>
                 </div>
-                <div className={this.props.classes.content}>
+                <div className={classes.content}>
                     <Typography variant="h6" component="h2">トーストを投稿</Typography>
                 </div>
-                <div className={this.props.classes.content}>
+                <div className={classes.content}>
                     <TextField 
                         placeholder="コメントを入力"
                         variant="outlined"
@@ -50,10 +66,10 @@ class ToastPage extends React.Component{
                         fullWidth
                     />
                 </div>
-                <div className={this.props.classes.content}>
+                <div className={classes.content}>
                     <TagBox />
                 </div>
-                <div className={this.props.classes.content}>
+                <div className={classes.content}>
                     <TextField 
                         placeholder="タグを入力"
                         variant="outlined"
@@ -71,8 +87,8 @@ class ToastPage extends React.Component{
                         fullWidth
                     />
                 </div>
-                <div className={this.props.classes.btnContent}>
-                    <Button variant="contained" color="primary" className={this.props.classes.submitBtn}>投稿</Button>
+                <div className={classes.btnContent}>
+                    <Button variant="contained" color="primary" className={classes.submitBtn}>投稿</Button>
                 </div>
             </div>
         );
