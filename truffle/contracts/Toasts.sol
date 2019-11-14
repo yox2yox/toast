@@ -26,6 +26,9 @@ contract Toasts {
   Comment[] public comments;
   mapping( address => uint[]) addressToComments;
 
+  mapping( string => uint[] ) articleToComments;
+  mapping( string => uint ) articleStaked;
+
   mapping( string => uint[]) tagToComments;
   string[] tags;
   mapping( string => uint ) tagToTagid;
@@ -106,6 +109,10 @@ contract Toasts {
 
   function getTag(uint tagid) public view returns (string memory){
     return tags[tagid];
+  }
+
+  function getArtcileInfo(string memory url) public view returns (uint[] memory,uint){
+    return (articleToComments[url],articleStaked[url]);
   }
 
 
