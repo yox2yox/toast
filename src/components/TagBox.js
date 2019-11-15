@@ -9,45 +9,20 @@ const useStyles = makeStyles(theme => ({
     }
 }));
 
-export default function TagBox(){
+export default function TagBox(props){
     const classes = useStyles();
     return (
         <div>
-            <Chip
-            className={classes.tag}
-            label="衝撃"
-            onDelete={()=>{}}
-            />
-            <Chip
-                className={classes.tag}
-                label="衝撃画像"
-                onDelete={()=>{}}
-            />
-            <Chip
-                className={classes.tag}
-                label="生物"
-                onDelete={()=>{}}
-            />
-            <Chip
-                className={classes.tag}
-                label="生き物"
-                onDelete={()=>{}}
-            />
-            <Chip
-                className={classes.tag}
-                label="いきもの"
-                onDelete={()=>{}}
-            />
-            <Chip
-                className={classes.tag}
-                label="深海"
-                onDelete={()=>{}}
-            />
-            <Chip
-                className={classes.tag}
-                label="海外"
-                onDelete={()=>{}}
-            />
+            {
+                props.tags.map((tagname,index)=>{
+                    return <Chip
+                    className={classes.tag}
+                    label={tagname}
+                    onDelete={()=>props.onDelete(tagname)}
+                    key={index}
+                    />
+                })
+            }
         </div>
     );
 }

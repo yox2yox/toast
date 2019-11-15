@@ -23,12 +23,12 @@ const useStyles = makeStyles({
   },
   content: {
       display:"flex",
-      alignItems: "center",
+      alignItems: "flex-start",
       textAlign:"left"
   },
   title: {
     overflow: "hidden",
-    maxHeight:77.5,
+    /*maxHeight:77.5,*/
     fontWeight:"bold",
     fontSize:16
   },
@@ -75,19 +75,19 @@ export default function AtricleCard(props) {
                 </Typography>
             </div>
           <Typography variant="body2" color="textSecondary" component="p">
-            {props.discription}
+            {props.description}
           </Typography>
           <div className={classes.articleInfoBox}>
             <div className={classes.infoContent}>
                 <img src="img/ether.png" alt="ether" className={classes.etherIcon}/>
                 <Typography variant="subtitle1" component="h2">
-                    23,000 ehter
+                    {props.staked} ehter
                 </Typography>
             </div>
             <div className={classes.infoContent}>
                 <Icon color="secondary" className={classes.fonticon}>comment</Icon>
                 <Typography variant="subtitle1" component="h2">
-                    2,300 comment
+                  {props.comments} comment
                 </Typography>
             </div>
           </div>

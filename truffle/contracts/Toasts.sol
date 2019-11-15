@@ -108,7 +108,12 @@ contract Toasts {
   }
 
   function getTag(uint tagid) public view returns (string memory){
-    return tags[tagid];
+    require(tagid>=1,"tagid is invalid");
+    return tags[tagid-1];
+  }
+
+  function getTagId(string memory tag) public view returns (uint) {
+    return tagToTagid[tag];
   }
 
   function getArtcileInfo(string memory url) public view returns (uint[] memory,uint){

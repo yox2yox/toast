@@ -118,6 +118,7 @@ class App extends React.Component {
 
   updateUserData = async () => {
     const { accounts, contract } = this.state;
+    console.log(contract)
     const userData = await contract.methods.getUserData(accounts[0]).call();
     console.log("Success to get UserData");
     console.log(userData);
@@ -126,7 +127,7 @@ class App extends React.Component {
 
   getOgpData = (url) => {
     try{
-      const ogp = getOgp();
+      const ogp = getOgp(url);
       return ogp
     }
     catch(err){

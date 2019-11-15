@@ -25,6 +25,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 export default function SearchBox(props) {
+
   const classes = useStyles();
 
   return (
@@ -33,6 +34,9 @@ export default function SearchBox(props) {
         className={classes.input}
         placeholder={props.placeholder}
         inputProps={{ 'aria-label': 'search google maps' }}
+        value={props.value}
+        onChange={props.onChange}
+        onClick={props.onBarClick}
       />
       <IconButton className={classes.iconButton} aria-label="search" onClick={props.onClick}>
         <SearchIcon />
