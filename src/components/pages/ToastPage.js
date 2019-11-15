@@ -94,21 +94,23 @@ class ToastPage extends React.Component{
     onClickSendTag = async ()=>{
         const {taginput,tagIds} = this.state;
         const {contract,accounts} = this.props;
-        try{
-            const tagId = await contract.methods.getTagId(taginput).call();
-            if( tagId<=0){
-                console.log("tag does not exist. create new tag");
-                await contract.methods.addTag(taginput).send({from:accounts[0]});
-            } else {
-                console.log("tag is found");
-                console.log(tagId);
+        if (taginput!==""){
+            try{
+                const tagId = await contract.methods.getTagId(taginput).call();
+                if( tagId<=0){
+                    console.log("tag does not exist. create new tag");
+                    await contract.methods.addTag(taginput).send({from:accounts[0]});
+                } else {
+                    console.log("tag is found");
+                    console.log(tagId);
+                }
+                tagIds.push(tagId)
+                this.addTag(taginput)
+                this.setState({taginput:"",tagIds:tagIds})
             }
-            tagIds.push(taginput)
-            this.addTag(taginput)
-            this.setState({taginput:"",tagIds:tagIds})
-        }
-        catch(err){
-            alert("タグの追加に失敗しました");
+            catch(err){
+                alert("タグの追加に失敗しました");
+            }
         }
     }
 
@@ -126,6 +128,23 @@ class ToastPage extends React.Component{
 
     resetUrl = () =>{
         this.setState({url:""})
+    }
+
+    onSubmit = async ()=>{
+        const {url,comment,tagIds,isGood} = this.state;
+        const {contract,accounts} = this.props;
+        if (url!==""&&comment!==""&&tagIds.length>0){
+            try{
+                await contract.methods.toastComment(url,comment,isGood,tagIds).send({from:accounts[0]});
+                this.setState({url:"",comment:"",tagIds:[],isGood:true,addedTags:[],taginput:"",articleData:null})
+                alert("送信完了")
+            }catch(err){
+                alert("送信に失敗しました")
+                console.error(err)
+            }
+        } else {
+            alert("全ての項目を入力してください");
+        }
     }
 
     render(){
@@ -208,7 +227,7 @@ class ToastPage extends React.Component{
                     </FormControl>
                 </div>
                 <div className={classes.btnContent}>
-                    <Button variant="contained" color="primary" className={classes.submitBtn}>投稿</Button>
+                    <Button variant="contained" color="primary" className={classes.submitBtn} onClick={this.onSubmit}>投稿</Button>
                 </div>
             </div>
         );
