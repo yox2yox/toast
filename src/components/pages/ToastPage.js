@@ -8,6 +8,11 @@ import IconButton from '@material-ui/core/IconButton';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import AddBoxIcon from '@material-ui/icons/AddBox';
 import TagBox from '../TagBox';
+import Radio from '@material-ui/core/Radio';
+import RadioGroup from '@material-ui/core/RadioGroup';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import FormControl from '@material-ui/core/FormControl';
+import FormLabel from '@material-ui/core/FormLabel';
 
 
 const styles = {
@@ -19,9 +24,15 @@ const styles = {
     },
     btnContent:{
         margin:"20px auto",
+        display:"flex",
+        justifyContent:"center"
     },
     submitBtn:{
         width:200
+    },
+    radioGroup:{
+        display:"flex",
+        flexDirection:"row"
     }
 };
 
@@ -35,7 +46,8 @@ class ToastPage extends React.Component{
         comment:"",
         taginput:"",
         addedTags:[],
-        tagIds:[]
+        tagIds:[],
+        isGood:true
     }
 
     onSearchUrl = async () =>{
@@ -69,6 +81,14 @@ class ToastPage extends React.Component{
 
     onChangeUrl = (e)=>{
         this.setState({url:e.target.value})
+    }
+
+    onChangeIsGood = (e)=>{
+        if (e.target.value==="true"){
+            this.setState({isGood:true})
+        } else{
+            this.setState({isGood:false})
+        }
     }
 
     onClickSendTag = async ()=>{
@@ -117,7 +137,8 @@ class ToastPage extends React.Component{
             comment,
             taginput,
             addedTags,
-            url
+            url,
+            isGood
          } = this.state;
         return(
             <div>
@@ -177,6 +198,14 @@ class ToastPage extends React.Component{
                         value={taginput}
                         onChange={this.onChangeTagInput}
                     />
+                </div>
+                <div className={classes.content}>
+                    <FormControl component="fieldset">
+                        <RadioGroup aria-label="評価" name="isGood" value={isGood?"true":"false"} onChange={this.onChangeIsGood} className={classes.radioGroup}>
+                            <FormControlLabel value="true" control={<Radio />} label="Good" />
+                            <FormControlLabel value="false" control={<Radio />} label="Bad" />
+                        </RadioGroup>
+                    </FormControl>
                 </div>
                 <div className={classes.btnContent}>
                     <Button variant="contained" color="primary" className={classes.submitBtn}>投稿</Button>
