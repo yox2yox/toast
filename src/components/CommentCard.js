@@ -47,13 +47,13 @@ export default function CommentCard(props) {
     <div className={classes.root}>
         <div className={classes.row}>
             <Avatar className={classes.avatar}></Avatar>
-            <div className={classes.name}>なまえさん</div>
+        <div className={classes.name}>{props.name}</div>
         </div>
         <div className={`${classes.reputation} ${props.good?classes.repGood:classes.repBad}`}>
             {props.good?"Good!":"Bad!"}
         </div>
         <div className={classes.message}>
-            ああああああああああああああああああああああああ
+            {props.body}
         </div>
         <div className={classes.row}>
             <Button className={classes.button}>

@@ -59,9 +59,9 @@ class ToastPage extends React.Component{
         this.setState({articleData:data.Result});
         try{
             const articleInfo = await contract.methods.getArtcileInfo(url).call();
-            if( articleInfo.length >= 2){
-                const count = articleInfo[0].length;
-                const staked = articleInfo[1];
+            if( articleInfo.length >= 3){
+                const count = articleInfo[1].length;
+                const staked = articleInfo[2];
                 this.setState({commentCount:count,staked:staked});
             }
         }
@@ -135,7 +135,8 @@ class ToastPage extends React.Component{
         const {contract,accounts} = this.props;
         if (url!==""&&comment!==""&&tagIds.length>0){
             try{
-                await contract.methods.toastComment(url,comment,isGood,tagIds).send({from:accounts[0]});
+                const urlbyte = (new TextEncoder('utf-8')).encode(url)
+                await contract.methods.toastComment(urlbyte,comment,isGood,tagIds).send({from:accounts[0]});
                 this.setState({url:"",comment:"",tagIds:[],isGood:true,addedTags:[],taginput:"",articleData:null})
                 alert("送信完了")
             }catch(err){

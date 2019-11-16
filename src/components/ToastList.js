@@ -15,11 +15,21 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-export default function ToastList() {
+export default function ToastList(props) {
+  const {comments} = props;
   const classes = useStyles();
 
   return (
     <List component="nav" className={classes.root} aria-label="mailbox folders">
+      {
+        comments.map((com,index)=>{
+          return (
+          <ListItem className={classes.item} key={index}>
+            <CommentCard body={com[2]} name={com[5][0]} good={com[4]}></CommentCard>
+          </ListItem>
+        )
+        })
+      }
       <ListItem className={classes.item}>
         <CommentCard good="true"></CommentCard>
       </ListItem>

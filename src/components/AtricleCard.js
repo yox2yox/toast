@@ -67,7 +67,7 @@ export default function AtricleCard(props) {
                 className={classes.media}
                 component="img"
                 alt="Contemplative Reptile"
-                image={props.image?props.image:"img/toast-icon.png"}
+                image={props.image?props.image:"/img/toast-icon.png"}
                 title="Contemplative Reptile"
                 />
                 <Typography gutterBottom component="h2" className={classes.title}>
@@ -79,7 +79,7 @@ export default function AtricleCard(props) {
           </Typography>
           <div className={classes.articleInfoBox}>
             <div className={classes.infoContent}>
-                <img src="img/ether.png" alt="ether" className={classes.etherIcon}/>
+                <img src="/img/ether.png" alt="ether" className={classes.etherIcon}/>
                 <Typography variant="subtitle1" component="h2">
                     {props.staked} ehter
                 </Typography>

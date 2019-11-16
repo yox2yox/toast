@@ -2,6 +2,7 @@ import React from 'react';
 import { withStyles } from '@material-ui/core/styles';
 import ToastAppBar from '../ToastAppBar';
 import { TextField, Typography, Button } from '@material-ui/core';
+import { encodeToBytes } from '../../utils/bytesEncoder';
 
 const styles = {
     content:{
@@ -34,8 +35,10 @@ class SignupPage extends React.Component{
             if (name !== ""){
                 this.setState({waitingContract:true});
                 this.props.startLoading();
+                const namebyte = encodeToBytes(name);
+                const discbyte = encodeToBytes(discription);
                 await this.props.contract.methods
-                        .signUp(name,discription)
+                        .signUp(namebyte,discbyte)
                         .send({from:this.props.accounts[0]});
                 this.props.updateUserData();
                 this.props.history.push("/home");

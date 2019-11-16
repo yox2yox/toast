@@ -16,6 +16,7 @@ import getOgp from "./utils/getOgp";
 import { withStyles } from '@material-ui/core/styles';
 import { createBrowserHistory } from "history";
 import { tsThisType } from '@babel/types';
+import { decodeFromHex } from './utils/bytesEncoder';
 
 const theme = createMuiTheme({
   palette: {
@@ -94,12 +95,12 @@ class App extends React.Component {
 
   initData = async () => {
     console.log(this.state)
-    const { history} = this.state;
+    const { history } = this.state;
     const locationPath = history.location.pathname;
     console.log("this page is "+locationPath);
     await this.updateUserData()
     const userData = this.state.userData
-    if (userData[0] === ""){
+    if (userData[0] === null || userData[0] === ""){
       history.push("/")
     }
     else if (locationPath === "/signup" || locationPath === "/"){
@@ -121,8 +122,16 @@ class App extends React.Component {
     console.log(contract)
     const userData = await contract.methods.getUserData(accounts[0]).call();
     console.log("Success to get UserData");
+    userData[0] = decodeFromHex(userData[0]);
+    userData[1] = decodeFromHex(userData[1]);
     console.log(userData);
     this.setState({userData});
+    try{
+      const article = await contract.methods.getComment(1).call();
+      console.log(article)
+    } catch(err){
+      console.error("failed to get comment")
+    }
   }
 
   getOgpData = (url) => {
@@ -147,7 +156,7 @@ class App extends React.Component {
           <Route exact path='/' component={TitlePage} />
           <Route exact path='/home' render={() => <HomePage {...this.state}/>} />
           <Route path='/edit' render={()=> <ToastPage {...this.state}/>}/>
-          <Route path='/comments' component={ViewToastsPage} />
+          <Route path='/comments/:id' render={()=> <ViewToastsPage {...this.state}/>} />
           <Route path='/signup' render={()=> <SignupPage {...this.state}/>} />
           <Route path='/result' component={SearchResultPage} />
           <Route path='/user' component={UserInfoPage} />

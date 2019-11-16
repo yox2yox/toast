@@ -36,7 +36,7 @@ export default function SearchBox(props) {
         inputProps={{ 'aria-label': 'search google maps' }}
         value={props.value}
         onChange={props.onChange}
-        onClick={props.onBarClick}
+        onClick={props.onClickBar}
       />
       <IconButton className={classes.iconButton} aria-label="search" onClick={props.onClick}>
         <SearchIcon />

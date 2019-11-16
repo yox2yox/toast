@@ -24,7 +24,7 @@ export default function ArticleList() {
   return (
     <div className={classes.container}>
         <div className={classes.iconContainer}>
-            <img src="img/toast-icon.png" alt="toast" className={classes.icon}/>
+            <img src="/img/toast-icon.png" alt="toast" className={classes.icon}/>
         </div>
     </div>
   );

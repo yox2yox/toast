@@ -3,17 +3,24 @@ pragma solidity ^0.5.0;
 contract Toasts {
 
   struct UserData {
-    string name;
-    string discription;
+    bytes name;
+    bytes discription;
     uint balance;
   }
 
   struct Comment {
     address author;
-    string article_url;
+    bytes article_url;
+    uint article_id;
     string comment;
     uint staked;
     bool is_good;
+  }
+
+  struct Article{
+    uint[] comments;
+    uint staked;
+    bytes url;
   }
 
   mapping(address => UserData) usersData;
@@ -26,14 +33,15 @@ contract Toasts {
   Comment[] public comments;
   mapping( address => uint[]) addressToComments;
 
-  mapping( string => uint[] ) articleToComments;
-  mapping( string => uint ) articleStaked;
-
   mapping( string => uint[]) tagToComments;
   string[] tags;
   mapping( string => uint ) tagToTagid;
 
-  function signUp(string memory _name,string memory _discription) public {
+
+  Article[] public articles;
+  mapping( bytes32 => uint ) urlToArticleId;
+
+  function signUp(bytes memory _name,bytes memory _discription) public {
     usersData[msg.sender] = UserData(_name,_discription,0);
   }
 
@@ -51,12 +59,26 @@ contract Toasts {
       uint val = stake_amount[msg.sender][index-1];
       stake_amount[msg.sender][index-1] = val + msg.value;
     }
-
+    comments[commentid-1].staked += msg.value;
+    articles[comments[commentid-1].article_id-1].staked += msg.value;
   }
 
-  function toastComment(string memory url,string memory comment,bool isgood,uint[] memory tagsId) public returns(uint) {
-    comments.push(Comment(msg.sender,url,comment,0,isgood));
-    addressToComments[msg.sender].push(comments.length);
+  function toastComment(bytes memory url,string memory comment,bool isgood,uint[] memory tagsId) public returns(uint) {
+    bytes32 urlhash = keccak256(url);
+    uint articleId = urlToArticleId[urlhash];
+    if (articleId<=0){
+      urlToArticleId[urlhash] = articles.length+1;
+      articleId = articles.length+1;
+      uint[] memory coms;
+      articles.push(Article(coms,0,url));
+      articles[articleId-1].comments.push(comments.length+1);
+    } else {
+      articles[articleId-1].comments.push(comments.length+1);
+      articles[articleId-1].url = url;
+    }
+
+    addressToComments[msg.sender].push(comments.length+1);
+    comments.push(Comment(msg.sender,url,articleId,comment,0,isgood));
     for( uint i = 0; i < tagsId.length; i++ ){
       if (tagsId[i]<=tags.length && tagsId[i] != 0){
         tagToComments[tags[tagsId[i]-1]].push(comments.length);
@@ -77,7 +99,7 @@ contract Toasts {
     msg.sender.transfer(balance);
   }
 
-  function getUserData(address user) public view returns (string memory,string memory,uint) {
+  function getUserData(address user) public view returns (bytes memory,bytes memory,uint) {
     return (usersData[user].name,usersData[user].discription,usersData[user].balance);
   }
 
@@ -89,10 +111,11 @@ contract Toasts {
     return (addressToStakeIndex[msg.sender][user]);
   }
 
-  function getComment(uint commentid) public view returns (address,string memory,string memory,uint,bool) {
+  function getComment(uint commentid) public view returns (address,bytes memory,string memory,uint,bool) {
+    require(commentid>0 && commentid <= comments.length,"commentid is invalid");
     uint index = commentid - 1;
     return (comments[index].author,comments[index].article_url,comments[index].comment,
-            comments[index].staked,comments[index].is_good);
+          comments[index].staked,comments[index].is_good);
   }
 
   function getUsersCommentsIndex(address user) public view returns (uint[] memory) {
@@ -108,7 +131,7 @@ contract Toasts {
   }
 
   function getTag(uint tagid) public view returns (string memory){
-    require(tagid>=1,"tagid is invalid");
+    require(tagid>=1&&tagid<=tags.length,"tagid is invalid");
     return tags[tagid-1];
   }
 
@@ -116,8 +139,15 @@ contract Toasts {
     return tagToTagid[tag];
   }
 
-  function getArtcileInfo(string memory url) public view returns (uint[] memory,uint){
-    return (articleToComments[url],articleStaked[url]);
+  function getArtcileInfoFromUrl(bytes memory url) public view returns (uint,uint[] memory,uint){
+    uint id = urlToArticleId[keccak256(url)];
+    require(id>0&&id<=articles.length,"id is invalid");
+    return (id,articles[id-1].comments,articles[id-1].staked);
+  }
+
+  function getArticleInfoFromId(uint id) public view returns (bytes memory,uint[] memory,uint){
+    require(id>0&&id<=articles.length,"id is invalid");
+    return (articles[id-1].url,articles[id-1].comments,articles[id-1].staked);
   }
 
 
