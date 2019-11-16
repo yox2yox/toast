@@ -30,26 +30,6 @@ export default function ToastList(props) {
         )
         })
       }
-      <ListItem className={classes.item}>
-        <CommentCard good="true"></CommentCard>
-      </ListItem>
-      <Divider />
-      <ListItem>
-        <CommentCard></CommentCard>
-      </ListItem>
-      <Divider />
-      <ListItem>
-        <CommentCard></CommentCard>
-      </ListItem>
-      <Divider />
-      <ListItem>
-        <CommentCard good="true"></CommentCard>
-      </ListItem>
-      <Divider />
-      <ListItem>
-        <CommentCard></CommentCard>
-      </ListItem>
-      <Divider />
     </List>
   );
 }
