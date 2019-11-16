@@ -118,12 +118,13 @@ class App extends React.Component {
   }
 
   updateUserData = async () => {
-    const { accounts, contract } = this.state;
+    const { accounts, contract,web3 } = this.state;
     console.log(contract)
     const userData = await contract.methods.getUserData(accounts[0]).call();
     console.log("Success to get UserData");
     userData[0] = decodeFromHex(userData[0]);
     userData[1] = decodeFromHex(userData[1]);
+    userData[2] = web3.utils.fromWei(userData[2],'ether');
     console.log(userData);
     this.setState({userData});
     try{

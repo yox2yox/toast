@@ -9,10 +9,11 @@ contract Toasts {
   }
 
   struct Comment {
+    uint comment_id;
     address author;
     bytes article_url;
     uint article_id;
-    string comment;
+    bytes comment;
     uint staked;
     bool is_good;
   }
@@ -33,9 +34,9 @@ contract Toasts {
   Comment[] public comments;
   mapping( address => uint[]) addressToComments;
 
-  mapping( string => uint[]) tagToComments;
-  string[] tags;
-  mapping( string => uint ) tagToTagid;
+  mapping( bytes => uint[]) tagToComments;
+  bytes[] tags;
+  mapping( bytes => uint ) tagToTagid;
 
 
   Article[] public articles;
@@ -47,7 +48,7 @@ contract Toasts {
 
   function sendEther(uint commentid) public payable {
 
-    require(commentid <= comments.length && commentid > 0);
+    require(commentid <= comments.length && commentid > 0,"id is invalid");
     address to = comments[commentid-1].author;
     usersData[to].balance += msg.value;
     uint index = addressToStakeIndex[msg.sender][to];
@@ -63,7 +64,7 @@ contract Toasts {
     articles[comments[commentid-1].article_id-1].staked += msg.value;
   }
 
-  function toastComment(bytes memory url,string memory comment,bool isgood,uint[] memory tagsId) public returns(uint) {
+  function toastComment(bytes memory url,bytes memory comment,bool isgood,uint[] memory tagsId) public returns(uint) {
     bytes32 urlhash = keccak256(url);
     uint articleId = urlToArticleId[urlhash];
     if (articleId<=0){
@@ -78,7 +79,7 @@ contract Toasts {
     }
 
     addressToComments[msg.sender].push(comments.length+1);
-    comments.push(Comment(msg.sender,url,articleId,comment,0,isgood));
+    comments.push(Comment(comments.length+1,msg.sender,url,articleId,comment,0,isgood));
     for( uint i = 0; i < tagsId.length; i++ ){
       if (tagsId[i]<=tags.length && tagsId[i] != 0){
         tagToComments[tags[tagsId[i]-1]].push(comments.length);
@@ -87,7 +88,7 @@ contract Toasts {
     return comments.length;
   }
 
-  function addTag(string memory tag) public {
+  function addTag(bytes memory tag) public {
     tags.push(tag);
     tagToTagid[tag] = tags.length;
   }
@@ -111,18 +112,18 @@ contract Toasts {
     return (addressToStakeIndex[msg.sender][user]);
   }
 
-  function getComment(uint commentid) public view returns (address,bytes memory,string memory,uint,bool) {
+  function getComment(uint commentid) public view returns (address,bytes memory,bytes memory,uint,bool,uint) {
     require(commentid>0 && commentid <= comments.length,"commentid is invalid");
     uint index = commentid - 1;
     return (comments[index].author,comments[index].article_url,comments[index].comment,
-          comments[index].staked,comments[index].is_good);
+          comments[index].staked,comments[index].is_good,commentid);
   }
 
   function getUsersCommentsIndex(address user) public view returns (uint[] memory) {
     return addressToComments[user];
   }
 
-  function getCommentsFromTag(string memory tag) public view returns (uint[] memory) {
+  function getCommentsFromTag(bytes memory tag) public view returns (uint[] memory) {
     return tagToComments[tag];
   }
 
@@ -130,12 +131,12 @@ contract Toasts {
     return tags.length;
   }
 
-  function getTag(uint tagid) public view returns (string memory){
+  function getTag(uint tagid) public view returns (bytes memory){
     require(tagid>=1&&tagid<=tags.length,"tagid is invalid");
     return tags[tagid-1];
   }
 
-  function getTagId(string memory tag) public view returns (uint) {
+  function getTagId(bytes memory tag) public view returns (uint) {
     return tagToTagid[tag];
   }
 

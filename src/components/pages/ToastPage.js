@@ -13,7 +13,7 @@ import RadioGroup from '@material-ui/core/RadioGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import FormControl from '@material-ui/core/FormControl';
 import FormLabel from '@material-ui/core/FormLabel';
-
+import { encodeToBytes,decodeFromHex } from '../../utils/bytesEncoder';
 
 const styles = {
     content:{
@@ -52,7 +52,7 @@ class ToastPage extends React.Component{
 
     onSearchUrl = async () =>{
         const {url} = this.state;
-        const {contract,getOgp} = this.props
+        const {contract,getOgp,web3} = this.props
         const data = getOgp(url);
         console.log("called onSearchUrl success to get data")
         console.log(data)
@@ -61,7 +61,7 @@ class ToastPage extends React.Component{
             const articleInfo = await contract.methods.getArtcileInfo(url).call();
             if( articleInfo.length >= 3){
                 const count = articleInfo[1].length;
-                const staked = articleInfo[2];
+                const staked = web3.utils.fromWei(articleInfo[2],'ether');
                 this.setState({commentCount:count,staked:staked});
             }
         }
@@ -96,10 +96,11 @@ class ToastPage extends React.Component{
         const {contract,accounts} = this.props;
         if (taginput!==""){
             try{
-                const tagId = await contract.methods.getTagId(taginput).call();
+                const tagbyte = encodeToBytes(taginput);
+                const tagId = await contract.methods.getTagId(tagbyte).call();
                 if( tagId<=0){
                     console.log("tag does not exist. create new tag");
-                    await contract.methods.addTag(taginput).send({from:accounts[0]});
+                    await contract.methods.addTag(tagbyte).send({from:accounts[0]});
                 } else {
                     console.log("tag is found");
                     console.log(tagId);
@@ -136,7 +137,8 @@ class ToastPage extends React.Component{
         if (url!==""&&comment!==""&&tagIds.length>0){
             try{
                 const urlbyte = (new TextEncoder('utf-8')).encode(url)
-                await contract.methods.toastComment(urlbyte,comment,isGood,tagIds).send({from:accounts[0]});
+                const commentByte = encodeToBytes(comment)
+                await contract.methods.toastComment(urlbyte,commentByte,isGood,tagIds).send({from:accounts[0]});
                 this.setState({url:"",comment:"",tagIds:[],isGood:true,addedTags:[],taginput:"",articleData:null})
                 alert("送信完了")
             }catch(err){
