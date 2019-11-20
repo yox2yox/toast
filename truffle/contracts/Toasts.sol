@@ -100,6 +100,12 @@ contract Toasts {
     msg.sender.transfer(balance);
   }
 
+  function resetStake(address to) public {
+    uint index = addressToStakeIndex[msg.sender][to];
+    require(index!=0,"cannnot find stake");
+    stake_amount[msg.sender][index-1] = 0;
+  }
+
   function getUserData(address user) public view returns (bytes memory,bytes memory,uint) {
     return (usersData[user].name,usersData[user].discription,usersData[user].balance);
   }
@@ -112,11 +118,21 @@ contract Toasts {
     return (addressToStakeIndex[msg.sender][user]);
   }
 
-  function getComment(uint commentid) public view returns (address,bytes memory,bytes memory,uint,bool,uint) {
+  function getStakeAmount(address from,address to) public view returns (uint) {
+    uint index = addressToStakeIndex[from][to];
+    if (index>0){
+      return stake_amount[from][index-1];
+    }
+    else{
+      return 0;
+    }
+  }
+
+  function getComment(uint commentid) public view returns (address, bytes memory, bytes memory, uint, bool, uint, uint) {
     require(commentid>0 && commentid <= comments.length,"commentid is invalid");
     uint index = commentid - 1;
     return (comments[index].author,comments[index].article_url,comments[index].comment,
-          comments[index].staked,comments[index].is_good,commentid);
+          comments[index].staked,comments[index].is_good,commentid,comments[index].article_id);
   }
 
   function getUsersCommentsIndex(address user) public view returns (uint[] memory) {

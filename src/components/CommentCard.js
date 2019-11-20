@@ -59,7 +59,7 @@ export default function CommentCard(props) {
             <Button className={classes.button} onClick={()=>{props.sendEther(props.id);console.log("clicked")}}>
                 <CreditCardIcon color="primary" className={classes.btnIcon}/>Etherを送金
             </Button>
-            <Button className={classes.button}>
+            <Button className={classes.button} onClick={()=>{props.sendBad(props.id);console.log("clicked")}}>
                 <ThumbDownIcon className={classes.btnIcon}/>低評価
             </Button>
         </div>

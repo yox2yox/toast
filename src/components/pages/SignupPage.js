@@ -60,7 +60,7 @@ class SignupPage extends React.Component{
     render(){
         return(
             <div>
-                <ToastAppBar pageTitle="サインアップ"></ToastAppBar>
+                <ToastAppBar pageTitle="サインアップ" beforeInit="true"></ToastAppBar>
                 <div className={this.props.classes.content}>
                     <Typography variant="h6" component="h2">新規アカウント情報を登録</Typography>
                 </div>

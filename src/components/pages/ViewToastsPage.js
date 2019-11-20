@@ -4,7 +4,6 @@ import { withRouter } from "react-router";
 import ToastAppBar from '../ToastAppBar';
 import ArticleCard from '../AtricleCard';
 import ToastList from '../ToastList';
-import getOgp from '../../utils/getOgp';
 import { decodeFromHex } from '../../utils/bytesEncoder';
 import Modal from '@material-ui/core/Modal';
 import { Button, FilledInput, InputAdornment, OutlinedInput } from '@material-ui/core';
@@ -67,29 +66,30 @@ class ViewToastsPage extends React.Component{
         targetCommentId:0
     }
 
-    componentDidUpdate(){
-        const {contract,accounts} = this.props;
-        const {isInit} = this.state;
-        if (contract&&isInit==false){
-            const params = this.props.match.params;
-            console.log("get params");
-            console.log(params);
-            if (params["id"] && !isNaN(params["id"])){
-                this.updateArticleData(parseInt(params["id"],10))
-                this.setState({isInit:true});
-            } else{
-
+    componentDidMount(){
+        const {setInitCallback} = this.props;
+        setInitCallback((props)=>{
+            const {contract,accounts} = props;
+            const {isInit} = this.state;
+            if (contract&&isInit===false){
+                const params = this.props.match.params;
+                console.log("get params");
+                console.log(params);
+                if (params["id"] && !isNaN(params["id"])){
+                    this.updateArticleData(parseInt(params["id"],10))
+                    this.setState({isInit:true});
+                }
             }
-        }
+        })
     }
 
     updateArticleData = async (id)=>{
-        const {contract,web3} = this.props;
+        const {contract,web3,getOgpData} = this.props;
         try{
             const article = await contract.methods.getArticleInfoFromId(id).call();
             console.log(article)
             const url = decodeFromHex(article[0]);
-            const urlData = getOgp(url);
+            const urlData = getOgpData(url);
             console.log(urlData);
             this.setState({urlData:urlData.Result});
             if (Object.keys(article).length>=3){
@@ -103,7 +103,7 @@ class ViewToastsPage extends React.Component{
                         const userData = await contract.methods.getUserData(comment[0]).call();
                         userData[0] = decodeFromHex(userData[0]);
                         userData[1] = decodeFromHex(userData[1]);
-                        comment[6] = userData;
+                        comment[7] = userData;
                         comments.push(comment);
                         console.log(comments);
                     }catch(err){
@@ -137,12 +137,36 @@ class ViewToastsPage extends React.Component{
         console.log(etherSendInput);
         console.log(targetCommentId)
         try{
-            await contract.methods.sendEther(targetCommentId).send({from:accounts[0],value:web3.utils.toWei(etherSendInput,'ether')});
+            await contract.methods.sendEther(targetCommentId).send({from:accounts[0],value:web3.utils.toWei(etherSendInput,'ether'),gas:2000000});
             alert("送信完了しました")
             this.closeModal();
         } catch(err){
             console.error(err);
             alert("送信に失敗しました")
+        }
+    }
+
+    onClickSendBad = async (commentId)=>{
+        await this.setState({targetCommentId:commentId})
+        await this.sendBad()
+        this.setState({targetCommentId:0})
+    }
+
+    sendBad = async ()=>{
+        const { targetCommentId } = this.state;
+        const { contract,accounts } = this.props;
+        console.log(targetCommentId)
+        try{
+            const comment = await contract.methods.getComment(targetCommentId).call();
+            const amount = await contract.methods.getStakeAmount(accounts[0],comment[0]).call();
+            if (amount>0){
+                await contract.methods.resetStake(comment[0]).send({from:accounts[0],gas:2000000});
+            }
+            alert("低評価しました")
+            this.closeModal();
+        } catch(err){
+            console.error(err);
+            alert("低評価に失敗しました")
         }
     }
 
@@ -183,10 +207,11 @@ class ViewToastsPage extends React.Component{
                         description={urlData?urlData.description:""}
                         image={urlData?urlData.image:""}
                         staked={staked}
+                        comments={comments.length}
                     ></ArticleCard>
                 </div>
                 <div className={classes.comment}>
-                    <ToastList comments={comments} sendEther={this.openModal}></ToastList>
+                    <ToastList comments={comments} sendEther={this.openModal} sendBad={this.onClickSendBad}></ToastList>
                 </div>
             </div>   
         );

@@ -59,7 +59,7 @@ export default function AtricleCard(props) {
   const classes = useStyles();
 
   return (
-    <Card className={classes.card}>
+    <Card className={classes.card} onClick={props.onClick?()=>props.onClick(props.articleId):()=>{}}>
       <CardActionArea>
         <CardContent className={classes.cardContent}>
             <div className={classes.content}>

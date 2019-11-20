@@ -52,21 +52,24 @@ class ToastPage extends React.Component{
 
     onSearchUrl = async () =>{
         const {url} = this.state;
-        const {contract,getOgp,web3} = this.props
-        const data = getOgp(url);
+        const {contract,getOgpData,web3} = this.props
+        const data = getOgpData(url);
         console.log("called onSearchUrl success to get data")
         console.log(data)
         this.setState({articleData:data.Result});
         try{
-            const articleInfo = await contract.methods.getArtcileInfo(url).call();
-            if( articleInfo.length >= 3){
+            const urlbytes = encodeToBytes(url);
+            const articleInfo = await contract.methods.getArtcileInfoFromUrl(urlbytes).call();
+            console.log("get article info")
+            console.log(articleInfo)
+            if( Object.keys(articleInfo).length >= 3){
                 const count = articleInfo[1].length;
                 const staked = web3.utils.fromWei(articleInfo[2],'ether');
                 this.setState({commentCount:count,staked:staked});
             }
         }
         catch(err){
-
+            console.error(err);
         }
 
     };
@@ -97,10 +100,13 @@ class ToastPage extends React.Component{
         if (taginput!==""){
             try{
                 const tagbyte = encodeToBytes(taginput);
-                const tagId = await contract.methods.getTagId(tagbyte).call();
+                let tagId = await contract.methods.getTagId(tagbyte).call();
+
                 if( tagId<=0){
                     console.log("tag does not exist. create new tag");
-                    await contract.methods.addTag(tagbyte).send({from:accounts[0]});
+                    const addTag = contract.methods.addTag(tagbyte);
+                    await addTag.send({from:accounts[0],gas:2000000});
+                    tagId = await contract.methods.getTagId(tagbyte).call();
                 } else {
                     console.log("tag is found");
                     console.log(tagId);
@@ -111,6 +117,7 @@ class ToastPage extends React.Component{
             }
             catch(err){
                 alert("タグの追加に失敗しました");
+                console.error(err);
             }
         }
     }
@@ -138,7 +145,7 @@ class ToastPage extends React.Component{
             try{
                 const urlbyte = (new TextEncoder('utf-8')).encode(url)
                 const commentByte = encodeToBytes(comment)
-                await contract.methods.toastComment(urlbyte,commentByte,isGood,tagIds).send({from:accounts[0]});
+                await contract.methods.toastComment(urlbyte,commentByte,isGood,tagIds).send({from:accounts[0],gas:2000000});
                 this.setState({url:"",comment:"",tagIds:[],isGood:true,addedTags:[],taginput:"",articleData:null})
                 alert("送信完了")
             }catch(err){

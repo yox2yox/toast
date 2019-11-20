@@ -34,7 +34,7 @@ const useStyles = makeStyles(theme => ({
 
 export default function TokenInfoBox(props){
     const classes = useStyles();
-    const {userData} = props;
+    const {userData,onClickUpdate} = props;
     console.log("called TokenInfoBox Component.And got these props")
     console.log(props)
 
@@ -52,8 +52,8 @@ export default function TokenInfoBox(props){
                 400 jelly
             </div>
             <div className={classes.tokenBox}>
-                <Button variant="contained" color="primary" className={classes.etherButton}>
-                    引き出す
+                <Button variant="contained" color="primary" className={classes.etherButton} onClick={onClickUpdate}>
+                    更新
                 </Button>
             </div>
             <div className={classes.tokenBox}>

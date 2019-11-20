@@ -46,13 +46,9 @@ const styles = {
         zIndex:0
     },
     btn:{
-        position:"fixed",
         backgroundColor:"white",
         width:200,
-        left:"50%",
-        bottom:50,
-        transform: "translate(-50%, -50%)",
-        zIndex:0,
+        marginTop:50
     }
 }
 

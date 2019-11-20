@@ -16,32 +16,26 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-export default function ArticleList() {
+export default function ArticleList(props) {
   const classes = useStyles();
 
   return (
     <List component="nav" className={classes.root} aria-label="mailbox folders">
-      <ListItem className={classes.item}>
-        <AtricleCard/>
-      </ListItem>
-      <ListItem className={classes.item}>
-        <AtricleCard/>
-      </ListItem>
-      <ListItem className={classes.item}>
-        <AtricleCard/>
-      </ListItem>
-      <ListItem className={classes.item}>
-        <AtricleCard/>
-      </ListItem>
-      <ListItem className={classes.item}>
-        <AtricleCard/>
-      </ListItem>
-      <ListItem className={classes.item}>
-        <AtricleCard/>
-      </ListItem>
-      <ListItem className={classes.item}>
-        <AtricleCard/>
-      </ListItem>
+      {
+        props.searchResults.map((result,index)=>
+          <ListItem className={classes.item} key={index}>
+            <AtricleCard
+              title={result[4].title}
+              image={result[4].image}
+              description={result[4].description}
+              staked={result[2]}
+              comments={result[1].length}
+              articleId={result[3]}
+              onClick={props.onClickArticle}
+            />
+          </ListItem>
+        )
+      }
     </List>
   );
 }

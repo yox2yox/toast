@@ -2,14 +2,14 @@ import React from 'react';
 import { withStyles } from '@material-ui/core/styles';
 import ToastAppBar from '../ToastAppBar';
 import ArticleList from '../ArticleList';
-import SearchBox from '../SearchBox';
+import KeyWordSearchBox from '../KeyWordSearchBox';
 
 const styles = {
     root:{
     },
     content:{
         margin:"10px auto",
-        width:"100%",
+        width:"90%",
         maxWidth:"600px",
         textAlign:"left"
     },
@@ -22,16 +22,17 @@ const styles = {
 }
 
 class SearchResultPage extends React.Component{
+
     render(){
-        const classes = this.props.classes
+        const {classes,searchResults,onClickArticle,searchOnBase} = this.props
         return (
             <div className={classes.root}>
                 <ToastAppBar pageTitle="検索結果"></ToastAppBar>
                 <div className={this.props.classes.content}>
-                    <SearchBox placeholder="検索"></SearchBox>
+                    <KeyWordSearchBox placeholder="検索" searchOnBase={searchOnBase}></KeyWordSearchBox>
                 </div>
                 <div className={classes.comment}>
-                    <ArticleList />
+                    <ArticleList searchResults={searchResults} onClickArticle={onClickArticle}/>
                 </div>
             </div>   
         );

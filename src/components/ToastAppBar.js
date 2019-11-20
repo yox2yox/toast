@@ -3,9 +3,8 @@ import { makeStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
-import Button from '@material-ui/core/Button';
-import IconButton from '@material-ui/core/IconButton';
-import MenuIcon from '@material-ui/icons/Menu';
+import EditIcon from '@material-ui/icons/Edit';
+import { Link } from 'react-router-dom'
 
 const useStyles = makeStyles(theme => ({
   bar: {
@@ -13,7 +12,12 @@ const useStyles = makeStyles(theme => ({
     marginTop: 0,
     position: "fixed",
     width: "100%",
-    zIndex:20
+    zIndex:20,
+    
+  },
+  toolbar:{
+    display:"flex",
+    justifyContent:"space-between"
   },
   spacer:{
     height:64
@@ -23,7 +27,23 @@ const useStyles = makeStyles(theme => ({
   },
   title: {
     flexGrow: 1,
+    color:"white",
+    fontWeight:"bold",
+    fontSize:24
   },
+  titleLink:{
+    textDecoration: "none",
+    display:"flex",
+    alignItems:"center"
+  },
+  icon:{
+    weight:28,
+    height:28,
+    marginRight:5
+  },
+  iconEdit:{
+    color:"white"
+  }
 }));
 
 export default function ToastAppBar(props) {
@@ -31,14 +51,16 @@ export default function ToastAppBar(props) {
     return (
         <div>
         <AppBar position="static"　className={classes.bar}>
-            <Toolbar>
-            <IconButton edge="start" className={classes.menuButton} color="inherit" aria-label="menu">
-                <MenuIcon />
-            </IconButton>
-            <Typography variant="h6" className={classes.title}>
-                {props.pageTitle}
-            </Typography>
-            <Button color="inherit">Login</Button>
+            <Toolbar className={classes.toolbar}>
+            <Link to={props.beforeInit?"/":"/home"} className={classes.titleLink}>
+              <img src="/img/toast-icon.png" alt="toast" className={classes.icon}/>
+              <Typography variant="h6" className={classes.title}>
+                  Toast
+              </Typography>
+            </Link>
+            <Link to={props.beforeInit?"":"/edit"}>
+              <EditIcon className={classes.iconEdit}/>
+            </Link>
             </Toolbar>
         </AppBar>
         <div className={classes.spacer}></div>

@@ -16,7 +16,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 export default function ToastList(props) {
-  const {comments,sendEther} = props;
+  const {comments,sendEther,sendBad} = props;
   const classes = useStyles();
 
   return (
@@ -25,7 +25,7 @@ export default function ToastList(props) {
         comments.map((com,index)=>{
           return (
           <ListItem className={classes.item} key={index}>
-            <CommentCard body={com[2]} name={com[6][0]} good={com[4]} id={com[5]} sendEther={sendEther}></CommentCard>
+            <CommentCard body={com[2]} name={com[7][0]} good={com[4]} id={com[5]} sendEther={sendEther} sendBad={sendBad}></CommentCard>
           </ListItem>
         )
         })

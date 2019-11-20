@@ -26,9 +26,11 @@ const getWeb3 = () =>
       // Fallback to localhost; use dev console port by default...
       else {
         const provider = new Web3.providers.HttpProvider(
-          "http://127.0.0.1:8545"
+          "http://192.168.0.8:7545"
         );
+        const privateKey = "46F3676AD8A08E347CC7D1B5A41EB4110F8B20F6E902CE58E1A09BE0B2BE1F8D";
         const web3 = new Web3(provider);
+        web3.eth.accounts.privateKeyToAccount(privateKey);
         console.log("No web3 instance injected, using Local web3.");
         resolve(web3);
       }
