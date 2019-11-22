@@ -113,7 +113,7 @@ class ToastPage extends React.Component{
                 if( tagId<=0){
                     console.log("tag does not exist. create new tag");
                     const addTag = contract.methods.addTag(tagbyte);
-                    await addTag.send({from:accounts[0],gas:2000000});
+                    await addTag.send({from:accounts[0]});
                     tagId = await contract.methods.getTagId(tagbyte).call();
                 } else {
                     console.log("tag is found");

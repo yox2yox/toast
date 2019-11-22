@@ -63,9 +63,10 @@ class HomePage extends React.Component{
     getReqeustsInfo = async ()=>{
         const { contract,getOgpData,web3 } = this.props
         try{
-            const requestsJelly = await contract.methods.getRequestsJelly().call();
-            const requests = []
-            let i = 0;
+            let requestsJelly = await contract.methods.getRequestsJelly().call();
+            let requests = []
+            let i = 4;
+
             for (let jelly of requestsJelly){
                 const urlbytes = await contract.methods.getRequestUrl(i).call();
                 const url = decodeFromHex(urlbytes);
@@ -73,6 +74,9 @@ class HomePage extends React.Component{
                 const jellyEther = web3.utils.fromWei(jelly,'ether')
                 requests.push({jelly:jellyEther,url:url,title:ogpData["title"],image:ogpData["image"]});
                 i++;
+                if(i>5){
+                    break;
+                }
             }
             requests.sort((a,b)=>{
                 return parseFloat(b.jelly) - parseFloat(a.jelly)
