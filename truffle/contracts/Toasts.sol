@@ -6,6 +6,7 @@ contract Toasts {
     bytes name;
     bytes discription;
     uint balance;
+    uint jelly;
   }
 
   struct Comment {
@@ -42,13 +43,18 @@ contract Toasts {
   Article[] public articles;
   mapping( bytes32 => uint ) urlToArticleId;
 
+  mapping( bytes => uint ) urlToRequestId;
+  bytes[] requestsUrl;
+  uint[] jellyAmount;
+
   function signUp(bytes memory _name,bytes memory _discription) public {
-    usersData[msg.sender] = UserData(_name,_discription,0);
+    usersData[msg.sender] = UserData(_name,_discription,0,0);
   }
 
   function sendEther(uint commentid) public payable {
 
     require(commentid <= comments.length && commentid > 0,"id is invalid");
+
     address to = comments[commentid-1].author;
     usersData[to].balance += msg.value;
     uint index = addressToStakeIndex[msg.sender][to];
@@ -60,6 +66,7 @@ contract Toasts {
       uint val = stake_amount[msg.sender][index-1];
       stake_amount[msg.sender][index-1] = val + msg.value;
     }
+    usersData[msg.sender].jelly += msg.value;
     comments[commentid-1].staked += msg.value;
     articles[comments[commentid-1].article_id-1].staked += msg.value;
   }
@@ -93,6 +100,19 @@ contract Toasts {
     tagToTagid[tag] = tags.length;
   }
 
+  function sendRequest(bytes memory url,uint jelly) public {
+    require(usersData[msg.sender].jelly>jelly,"not enough jelly");
+    usersData[msg.sender].jelly -= jelly;
+    uint id = urlToRequestId[url];
+    if (id>0){
+      jellyAmount[id-1] += jelly;
+    } else {
+      requestsUrl.push(url);
+      jellyAmount.push(jelly);
+      urlToRequestId[url] = requestsUrl.length;
+    }
+  }
+
   function withdraw() public {
     uint balance = usersData[msg.sender].balance;
     require (balance > 0,"your balance is not enough");
@@ -106,8 +126,8 @@ contract Toasts {
     stake_amount[msg.sender][index-1] = 0;
   }
 
-  function getUserData(address user) public view returns (bytes memory,bytes memory,uint) {
-    return (usersData[user].name,usersData[user].discription,usersData[user].balance);
+  function getUserData(address user) public view returns (bytes memory,bytes memory,uint,uint) {
+    return (usersData[user].name,usersData[user].discription,usersData[user].balance,usersData[user].jelly);
   }
 
   function getStakes(address user) public view returns (address[] memory,uint[] memory) {
@@ -167,5 +187,12 @@ contract Toasts {
     return (articles[id-1].url,articles[id-1].comments,articles[id-1].staked);
   }
 
+  function getRequestsJelly() public view returns (uint[] memory){
+    return jellyAmount;
+  }
+
+  function getRequestUrl(uint id) public view returns (bytes memory){
+    return requestsUrl[id];
+  }
 
 }

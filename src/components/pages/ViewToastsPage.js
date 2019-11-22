@@ -63,7 +63,9 @@ class ViewToastsPage extends React.Component{
         staked:0,
         modal:false,
         etherSendInput:0,
-        targetCommentId:0
+        targetCommentId:0,
+        sendingEther:false,
+        sendingBad:false
     }
 
     componentDidMount(){
@@ -132,24 +134,32 @@ class ViewToastsPage extends React.Component{
     }
 
     sendEther = async ()=>{
-        const { targetCommentId,etherSendInput } = this.state;
-        const { contract,accounts,web3 } = this.props;
-        console.log(etherSendInput);
-        console.log(targetCommentId)
-        try{
-            await contract.methods.sendEther(targetCommentId).send({from:accounts[0],value:web3.utils.toWei(etherSendInput,'ether'),gas:2000000});
-            alert("送信完了しました")
-            this.closeModal();
-        } catch(err){
-            console.error(err);
-            alert("送信に失敗しました")
+        const { sendingEther,targetCommentId,etherSendInput } = this.state;
+        const { contract,accounts,web3,updateUserData } = this.props;
+        if (sendingEther===false){
+            this.setState({sendingEther:true});
+            console.log(etherSendInput);
+            console.log(targetCommentId)
+            try{
+                await contract.methods.sendEther(targetCommentId).send({from:accounts[0],value:web3.utils.toWei(etherSendInput,'ether'),gas:2000000});
+                alert("送信完了しました")
+                this.closeModal();
+                updateUserData();
+            } catch(err){
+                console.error(err);
+                alert("送信に失敗しました")
+            } finally{
+                this.setState({sendingEther:false});
+            }
         }
     }
 
     onClickSendBad = async (commentId)=>{
+        const { updateUserData } = this.props;
         await this.setState({targetCommentId:commentId})
         await this.sendBad()
         this.setState({targetCommentId:0})
+        updateUserData();
     }
 
     sendBad = async ()=>{
@@ -171,7 +181,7 @@ class ViewToastsPage extends React.Component{
     }
 
     render(){
-        const { urlData,staked,comments,modal,etherSendInput } = this.state;
+        const { url,urlData,staked,comments,modal,etherSendInput } = this.state;
         const classes = this.props.classes
         return (
             <div className={classes.root}>
@@ -208,6 +218,7 @@ class ViewToastsPage extends React.Component{
                         image={urlData?urlData.image:""}
                         staked={staked}
                         comments={comments.length}
+                        href={url}
                     ></ArticleCard>
                 </div>
                 <div className={classes.comment}>

@@ -52,6 +52,9 @@ const useStyles = makeStyles({
     display:"flex",
     alignItems: "center",
     textAlign:"left",
+  },
+  link:{
+    textDecoration:"none"
   }
 });
 
@@ -59,6 +62,7 @@ export default function AtricleCard(props) {
   const classes = useStyles();
 
   return (
+    <a href={props.href} target="_blank" rel="noopener noreferrer" className={classes.link}>
     <Card className={classes.card} onClick={props.onClick?()=>props.onClick(props.articleId):()=>{}}>
       <CardActionArea>
         <CardContent className={classes.cardContent}>
@@ -94,5 +98,6 @@ export default function AtricleCard(props) {
         </CardContent>
       </CardActionArea>
     </Card>
+    </a>
   );
 }

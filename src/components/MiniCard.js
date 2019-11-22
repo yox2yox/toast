@@ -29,11 +29,13 @@ const useStyles = makeStyles(theme => ({
 }));
 
 export default function MiniCard(props) {
+
+  const { onClick } = props;
   const classes = useStyles();
 
   return (
-    <div className={classes.root}>
-      <img src="img/test_thumb.jpg" className={classes.image} alt="thumbnail"/>
+    <div className={classes.root} onClick={props.url?(e)=>{onClick(props.url)}:(e)=>{}}>
+      <img src={props.image?props.image:"/img/toast-icon.png"} className={classes.image} alt="thumbnail"/>
       <div>
         <div className={classes.title}>
           {props.title?props.title:""}

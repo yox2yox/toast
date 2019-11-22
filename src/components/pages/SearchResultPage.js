@@ -3,6 +3,7 @@ import { withStyles } from '@material-ui/core/styles';
 import ToastAppBar from '../ToastAppBar';
 import ArticleList from '../ArticleList';
 import KeyWordSearchBox from '../KeyWordSearchBox';
+import SearchNotFound from '../SearchNotFound';
 
 const styles = {
     root:{
@@ -32,6 +33,11 @@ class SearchResultPage extends React.Component{
                     <KeyWordSearchBox placeholder="検索" searchOnBase={searchOnBase}></KeyWordSearchBox>
                 </div>
                 <div className={classes.comment}>
+                    {
+                        searchResults.length>0?
+                        "":
+                        <SearchNotFound></SearchNotFound>
+                    }
                     <ArticleList searchResults={searchResults} onClickArticle={onClickArticle}/>
                 </div>
             </div>   

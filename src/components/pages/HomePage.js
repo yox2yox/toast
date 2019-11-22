@@ -7,6 +7,8 @@ import HorizontalList from '../HorizontalList';
 import Fab from '@material-ui/core/Fab';
 import EditIcon from '@material-ui/icons/Edit';
 import { Link } from 'react-router-dom'
+import { decodeFromHex } from '../../utils/bytesEncoder';
+import getOgp from '../../utils/getOgp';
 
 const styles = {
     container:{
@@ -33,28 +35,58 @@ class HomePage extends React.Component{
 
     state = {
         searchWord:"",
+        requests:null
     }
 
     componentDidMount = () => {
         console.log("called HomePage. And got these props");
         console.log(this.props)
+        const { setInitCallback } = this.props;
+        setInitCallback(this.getReqeustsInfo);
     }
 
     withdraw = async ()=>{
-        const { contract,accounts,startLoading,closeLoading,updateUserData } = this.props
-        startLoading();
+        const { contract,accounts,startLoading,closeLoading,updateUserData,userData } = this.props
+        if (userData[4]){
+            startLoading();
+            try{
+                await contract.methods.withdraw().send({from:accounts[0],gas:2000000});
+                updateUserData();
+            } catch(err){
+                alert("残高の更新に失敗しました");
+                console.error(err);
+            }
+            closeLoading();
+        }
+    }
+
+    getReqeustsInfo = async ()=>{
+        const { contract,getOgpData,web3 } = this.props
         try{
-            await contract.methods.withdraw().send({from:accounts[0],gas:2000000});
-            updateUserData();
+            const requestsJelly = await contract.methods.getRequestsJelly().call();
+            const requests = []
+            let i = 0;
+            for (let jelly of requestsJelly){
+                const urlbytes = await contract.methods.getRequestUrl(i).call();
+                const url = decodeFromHex(urlbytes);
+                const ogpData = getOgpData(url)["Result"]
+                const jellyEther = web3.utils.fromWei(jelly,'ether')
+                requests.push({jelly:jellyEther,url:url,title:ogpData["title"],image:ogpData["image"]});
+                i++;
+            }
+            requests.sort((a,b)=>{
+                return parseFloat(b.jelly) - parseFloat(a.jelly)
+            })
+            console.log(requests);
+            this.setState({requests:requests})
         } catch(err){
-            alert("残高の更新に失敗しました");
             console.error(err);
         }
-        closeLoading();
     }
 
     render(){
-        const { classes } = this.props
+        const { requests } = this.state 
+        const { classes,openEditUrl } = this.props
         return(
         <div className={classes.container}>
             <ToastAppBar pageTitle="ホーム"></ToastAppBar>
@@ -69,7 +101,7 @@ class HomePage extends React.Component{
                 </div>
             </div>        
             <div className={classes.holList}>
-                <HorizontalList></HorizontalList>
+                <HorizontalList articles={requests} onClick={openEditUrl}></HorizontalList>
             </div>
         </div>
         );

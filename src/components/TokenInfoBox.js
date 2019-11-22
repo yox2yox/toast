@@ -1,6 +1,7 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
+import { Link } from 'react-router-dom'
 
 const useStyles = makeStyles(theme => ({
     userNameWrap:{
@@ -28,7 +29,10 @@ const useStyles = makeStyles(theme => ({
         width:"50%"
     },
     etherButton:{
-        marginTop:"10px"
+        marginTop:"10px",
+    },
+    btnLink:{
+        textDecoration:"none"
     }
 }));
 
@@ -49,7 +53,7 @@ export default function TokenInfoBox(props){
             </div>
             <div className={classes.tokenRight}>
                 <img className={classes.tokenIcon} src="img/jelly.png" alt="Ether"/>
-                400 jelly
+                {userData!=null?userData[3]:""} jelly
             </div>
             <div className={classes.tokenBox}>
                 <Button variant="contained" color="primary" className={classes.etherButton} onClick={onClickUpdate}>
@@ -57,6 +61,11 @@ export default function TokenInfoBox(props){
                 </Button>
             </div>
             <div className={classes.tokenBox}>
+                <Link to="/request" className={classes.btnLink}>
+                    <Button variant="contained" color="secondary" className={classes.etherButton}>
+                        リクエスト
+                    </Button>
+                </Link>
             </div>
         </div>
     );

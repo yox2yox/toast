@@ -21,31 +21,26 @@ const useStyles = makeStyles(theme => ({
     }
 }));
 
-export default function HorizontalList(){
+export default function HorizontalList(props){
 
+    const { articles,onClick } = props
     const classes = useStyles();
 
     return (
         <div>
             <div className={classes.listTitle}>
-               ピックしたトースト 
+               リクエスト一覧
             </div>
             <div className={classes.cardBox}>
-                <div className={classes.cardWrap}>
-                    <MiniCard></MiniCard>
-                </div>
-                <div className={classes.cardWrap}>
-                    <MiniCard></MiniCard>
-                </div>
-                <div className={classes.cardWrap}>
-                    <MiniCard></MiniCard>
-                </div>
-                <div className={classes.cardWrap}>
-                    <MiniCard></MiniCard>
-                </div>
-                <div className={classes.cardWrap}>
-                    <MiniCard></MiniCard>
-                </div>
+                {
+                    articles?
+                    articles.map((data,index)=>
+                        <div className={classes.cardWrap} key={index}>
+                            <MiniCard {...data} onClick={onClick}></MiniCard>
+                        </div>
+                    ):
+                    ""
+                }
             </div>
         </div>
     );

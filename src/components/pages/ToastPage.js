@@ -50,6 +50,14 @@ class ToastPage extends React.Component{
         isGood:true
     }
 
+    componentDidMount = async ()=>{
+        const {editTargetUrl} = this.props
+        await this.setState({url:editTargetUrl})
+        if (editTargetUrl){
+            this.onSearchUrl()
+        }
+    }
+
     onSearchUrl = async () =>{
         const {url} = this.state;
         const {contract,getOgpData,web3} = this.props
@@ -140,7 +148,7 @@ class ToastPage extends React.Component{
 
     onSubmit = async ()=>{
         const {url,comment,tagIds,isGood} = this.state;
-        const {contract,accounts} = this.props;
+        const {contract,accounts,history} = this.props;
         if (url!==""&&comment!==""&&tagIds.length>0){
             try{
                 const urlbyte = (new TextEncoder('utf-8')).encode(url)
@@ -148,6 +156,7 @@ class ToastPage extends React.Component{
                 await contract.methods.toastComment(urlbyte,commentByte,isGood,tagIds).send({from:accounts[0],gas:2000000});
                 this.setState({url:"",comment:"",tagIds:[],isGood:true,addedTags:[],taginput:"",articleData:null})
                 alert("送信完了")
+                history.push("/home")
             }catch(err){
                 alert("送信に失敗しました")
                 console.error(err)

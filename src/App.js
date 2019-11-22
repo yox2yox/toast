@@ -7,6 +7,7 @@ import ViewToastsPage from './components/pages/ViewToastsPage'
 import SignupPage from './components/pages/SignupPage';
 import TitlePage from './components/pages/TitlePage';
 import SearchResultPage from './components/pages/SearchResultPage';
+import RequestPage from './components/pages/RequestPage';
 import Loading from './components/Loading';
 import UserInfoPage from './components/pages/UserInfoPage';
 import { Router,BrowserRouter, Route, Link } from 'react-router-dom'
@@ -26,7 +27,7 @@ const theme = createMuiTheme({
       contrastText: '#000',
     },
     secondary: {
-      main: '#f44336',
+      main: '#D77186',
     },
     white:{
       main: "#ffffff"
@@ -62,12 +63,14 @@ class App extends React.Component {
       updateUserData:this.updateUserData,
       onClickArticle:this.onClickArticle,
       getOgpData:this.getOgpData,
+      openEditUrl:this.openEditUrl,
       history:history,
       reputation:{},
       searchResults:[],
       initCallbacks:[],
       setInitCallback:this.setInitCallback,
-      searchOnBase:this.searchOnBase
+      searchOnBase:this.searchOnBase,
+      editTargetUrl:"",
     }
   }
 
@@ -139,9 +142,13 @@ class App extends React.Component {
     const remote = userData[2];
     const base = 100
     userData[2] = Math.round(parseFloat(web3.utils.fromWei(balance,'ether')) * base) / base;
+    userData[3] = Math.round(parseFloat(web3.utils.fromWei(userData[3],'ether')) * base) / base;
     console.log(remote)
     if (remote>0){
       userData[2] = "* "+userData[2];
+      userData[4] = true
+    } else {
+      userData[4] = false
     }
     console.log(userData);
     this.setState({userData});
@@ -225,9 +232,11 @@ class App extends React.Component {
 
   searchOnBase = async (tags)=>{
     const { history } = this.state;
+    this.startLoading()
     const articles = await this.search(tags);
     this.setState({searchResults:articles});
     history.push("/result");
+    this.closeLoading()
   }
 
   search = async (tags)=>{
@@ -315,6 +324,12 @@ class App extends React.Component {
     history.push("/comments/"+articleId);
     this.setState({initCommentPage:true},()=>console.log(this.state))
   }
+  
+  openEditUrl = (url)=>{
+    const { history} = this.state;
+    history.push("/edit");
+    this.setState({editTargetUrl:url})
+  }
 
   render(){
     const classes = this.props.classes;
@@ -331,6 +346,7 @@ class App extends React.Component {
           <Route path='/comments/:id' render={()=> <ViewToastsPage {...this.state}/>} />
           <Route path='/signup' render={()=> <SignupPage {...this.state}/>} />
           <Route path='/result' render={()=><SearchResultPage {...this.state}/>} />
+          <Route path='/request' render={()=><RequestPage {...this.state}/>} />
           <Route path='/user' component={UserInfoPage} />
         </div>
       </Router>
