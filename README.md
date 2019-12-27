@@ -1,3 +1,14 @@
+# toast
+
+## 概要
+Ethereumのスマートコントラクトを使ったネット記事のレビューアプリです。
+
+ネット上の記事に対してレビューを書き込めます。
+
+ユーザーは良いレビュワーに対して仮想通貨を送金できます。
+
+# Develop
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
@@ -66,4 +77,3 @@ This section has moved here: https://facebook.github.io/create-react-app/docs/de
 ### `npm run build` fails to minify
 
 This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
-# toast
