@@ -1,8 +1,6 @@
 {
-    "devmode":"dev_mobile",
+    "devmode":"dev_local",
     "server":{
-        "dev_offline":"localhost",
-        "dev_wifi":"192.168.0.8",
-        "dev_mobile":"192.168.43.50"
+        "dev_local":"localhost"
     }
 }
